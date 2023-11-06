@@ -59,7 +59,7 @@ import pandas as pd
 plt.style.use("ggplot")
 
 # obtain dataset
-hotel_booking_frame = pandas.read_csv("hotel_bookings(1).csv")
+hotel_booking_frame = pd.read_csv("hotel_bookings(1).csv")
 assigned_price_frame = hotel_booking_frame.groupby(["hotel", "assigned_room_type"])["adr"].mean().reset_index()
 
 # pivot process
@@ -78,7 +78,51 @@ for p in ax.patches:
     ax.annotate(f'{p.get_height():.2f}', (p.get_x() + p.get_width() / 2., p.get_height()), ha='center', va='bottom', fontsize=8)
 
 # show table
-plt.show()
+st.table(plt)
+
+
+import pandas
+import matplotlib.pyplot as plt
+import ipywidgets as widgets
+from IPython.display import display
+
+plt.style.use("ggplot")
+
+# obtain dataset
+hotel_booking_frame = pandas.read_csv("hotel_bookings(1).csv")
+assigned_price_frame = hotel_booking_frame.groupby(["hotel", "assigned_room_type"])["adr"].mean().reset_index()
+
+# pivot process
+pivot_df = assigned_price_frame.pivot_table(index='hotel', columns='assigned_room_type', values='adr')
+
+# create a slider
+slider = widgets.IntSlider(value=1, min=1, max=len(pivot_df.columns), step=1, description='Number of Room Types', continuous_update=False)
+
+def update_chart(num_of_room_types):
+    # filter columns based on the selected number of room types
+    selected_columns = pivot_df.columns[:num_of_room_types]
+    selected_df = pivot_df[selected_columns]
+    
+    # draw the bar
+    ax = selected_df.plot(kind="bar", yerr=hotel_booking_frame.groupby(['hotel', 'assigned_room_type'])['adr'].std().unstack(), figsize=(30, 8))
+    ax.set_xlabel('hotel')
+    ax.set_ylabel('adr')
+    ax.set_title('Average Price and Standard Deviation of Assigned Rooms')
+    ax.legend(title='assigned_room_type', title_fontsize='12')
+    ax.set_xticklabels(hotel_booking_frame['hotel'].unique(), rotation=0)
+
+    # The number of prices is displayed at the top of the bar chart
+    for p in ax.patches:
+        ax.annotate(f'{p.get_height():.2f}', (p.get_x() + p.get_width() / 2., p.get_height()), ha='center', va='bottom', fontsize=8)
+
+    # show table
+    plt.show()
+
+# display the slider
+display(slider)
+
+# update the chart whenever the slider value changes
+widgets.interact(update_chart, num_of_room_types=slider)
 
 
 
