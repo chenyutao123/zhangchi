@@ -23,6 +23,14 @@ from streamlit.hello.utils import show_code
 import numpy as np
 import pandas as pd
 
+st.set_page_config(page_title="DataFrame Demo", page_icon="📊")
+st.markdown("# DataFrame Demo")
+st.sidebar.header("DataFrame Demo")
+st.write(
+    """This demo shows how to use `st.write` to visualize Pandas DataFrames.
+(Data courtesy of the [UN Data Explorer](http://data.un.org/Explorer.aspx).)"""
+)
+
 # Read the data file
 data = pd.read_csv('hotel_bookings(1).csv')
 
@@ -33,7 +41,7 @@ data = data.dropna()
 # Question 1: Calculate the average length of stay for each hotel
 average_stay = data.groupby('hotel')['stays_in_week_nights'].mean()
 print("Question 1: Average length of stay for each hotel")
-print(average_stay)
+st.show(average_stay)
 print()
 
 # Question 2: Calculate the cancellation rate for each month
@@ -195,14 +203,8 @@ def data_frame_demo():
         )
 
 
-st.set_page_config(page_title="DataFrame Demo", page_icon="📊")
-st.markdown("# DataFrame Demo")
-st.sidebar.header("DataFrame Demo")
-st.write(
-    """This demo shows how to use `st.write` to visualize Pandas DataFrames.
-(Data courtesy of the [UN Data Explorer](http://data.un.org/Explorer.aspx).)"""
-)
 
-data_frame_demo()
+
+#data_frame_demo()
 
 show_code(data_frame_demo)
