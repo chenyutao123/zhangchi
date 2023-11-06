@@ -113,7 +113,7 @@ resort_hotel = resort_hotel.groupby('reservation_status_date')[['adr']].mean()
 city_hotel = city_hotel.groupby('reservation_status_date')[['adr']].mean()
 
 # Print the mean adr of resort hotel over time
-st.write("# Question 6")
+st.write("# Question 6: Show the data to form the line chart")
 st.write("Resort Hotel:")
 st.write(resort_hotel)
 
@@ -146,7 +146,7 @@ total_adr_resort = resort_hotel.groupby(["month"])["adr"].sum()
 total_adr_city = city_hotel.groupby(["month"])["adr"].sum()
 
 # Print the total adr of resort hotel for each month
-st.write("# Question 7")
+st.write("# Question 7: Avergae price of each month in Resort Hotel and City Hotel")
 st.write("Resort Hotel:")
 st.write(total_adr_resort)
 
