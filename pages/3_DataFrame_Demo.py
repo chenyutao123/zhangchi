@@ -40,9 +40,8 @@ data = data.dropna()
 
 # Question 1: Calculate the average length of stay for each hotel
 average_stay = data.groupby('hotel')['stays_in_week_nights'].mean()
-print("Question 1: Average length of stay for each hotel")
-st.show(average_stay)
-print()
+st.write("# Question 1: Average length of stay for each hotel")
+st.write(average_stay)
 
 # Question 2: Calculate the cancellation rate for each month
 # Convert arrival_date to datetime format
@@ -51,9 +50,8 @@ data['arrival_date'] = pd.to_datetime(data['arrival_date_year'].astype(str) + '-
 data['year_month'] = data['arrival_date'].dt.to_period('M')
 # Calculate cancellation rate by grouping data by year_month and taking the mean of is_canceled
 cancellation_rate = data.groupby('year_month')['is_canceled'].mean()
-print("Question 2: Cancellation rate for each month")
-print(cancellation_rate)
-print()
+st.write("# Question 2: Cancellation rate for each month")
+st.write(cancellation_rate)
 
 # %%
 import numpy as np
@@ -68,15 +66,13 @@ data = data.dropna()
 
 # Question 1: Calculate the number of bookings for each market segment and distribution channel
 bookings_by_segment_channel = data.groupby(['market_segment', 'distribution_channel'])['hotel'].count()
-print("Question 1: Number of bookings for each market segment and distribution channel")
-print(bookings_by_segment_channel)
-print()
+st.write("# Question 3: Number of bookings for each market segment and distribution channel")
+st.write(bookings_by_segment_channel)
 
 # Question 2: Calculate the average cancellation rate for each market segment and distribution channel
 cancellation_rate_by_segment_channel = data.groupby(['market_segment', 'distribution_channel'])['is_canceled'].mean()
-print("Question 2: Average cancellation rate for each market segment and distribution channel")
-print(cancellation_rate_by_segment_channel)
-print()
+st.write("# Question 4: Average cancellation rate for each market segment and distribution channel")
+st.write(cancellation_rate_by_segment_channel)
 
 # %%
 import pandas as pd
@@ -92,7 +88,8 @@ assigned_price_frame = hotel_booking_frame.groupby(["hotel", "assigned_room_type
 pivot_df = assigned_price_frame.pivot_table(index='hotel', columns='assigned_room_type', values='adr')
 
 # Display the pivot table
-pivot_df  # This will display the pivot table with average adr for each hotel and assigned room type
+st.write("# Question 5: Average price of assigned rooms in City Hotel and Resort Hotel")
+st.write(pivot_df)  # This will display the pivot table with average adr for each hotel and assigned room type
 
 # %%
 import pandas as pd
@@ -116,12 +113,13 @@ resort_hotel = resort_hotel.groupby('reservation_status_date')[['adr']].mean()
 city_hotel = city_hotel.groupby('reservation_status_date')[['adr']].mean()
 
 # Print the mean adr of resort hotel over time
-print("Resort Hotel:")
-print(resort_hotel)
+st.write("# Question 6")
+st.write("Resort Hotel:")
+st.write(resort_hotel)
 
 # Print the mean adr of city hotel over time
-print("City Hotel:")
-print(city_hotel)
+st.write("City Hotel:")
+st.write(city_hotel)
 
 # %%
 import pandas as pd
@@ -148,12 +146,13 @@ total_adr_resort = resort_hotel.groupby(["month"])["adr"].sum()
 total_adr_city = city_hotel.groupby(["month"])["adr"].sum()
 
 # Print the total adr of resort hotel for each month
-print("Resort Hotel:")
-print(total_adr_resort)
+st.write("# Question 7")
+st.write("Resort Hotel:")
+st.write(total_adr_resort)
 
 # Print the total adr of city hotel for each month
-print("City Hotel:")
-print(total_adr_city)
+st.write("City Hotel:")
+st.write(total_adr_city)
 
 # %%
 
