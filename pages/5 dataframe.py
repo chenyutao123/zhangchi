@@ -53,6 +53,11 @@ cancellation_rate = data.groupby('year_month')['is_canceled'].mean()
 st.write("# Question 2: Cancellation rate for each month")
 st.write(cancellation_rate)
 
+# %%
+import numpy as np
+import pandas as pd
+
+# Read the data file
 data = pd.read_csv('hotel_bookings(1).csv')
 
 # Data preprocessing
@@ -68,7 +73,86 @@ st.write(bookings_by_segment_channel)
 cancellation_rate_by_segment_channel = data.groupby(['market_segment', 'distribution_channel'])['is_canceled'].mean()
 st.write("# Question 4: Average cancellation rate for each market segment and distribution channel")
 st.write(cancellation_rate_by_segment_channel)
+
 # %%
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# Read the data file
+hotel_booking_frame = pd.read_csv('hotel_bookings(1).csv')
+
+# Group by hotel and assigned room type, calculate the mean of adr
+assigned_price_frame = hotel_booking_frame.groupby(["hotel", "assigned_room_type"])["adr"].mean().reset_index()
+
+# Pivot process
+pivot_df = assigned_price_frame.pivot_table(index='hotel', columns='assigned_room_type', values='adr')
+
+# Display the pivot table
+st.write("# Question 5: Average price of assigned rooms in City Hotel and Resort Hotel")
+st.write(pivot_df)  # This will display the pivot table with average adr for each hotel and assigned room type
+
+# %%
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# Set the plot style
+plt.style.use("ggplot")
+
+# Obtain the dataset
+hotel_booking_frame = pd.read_csv('hotel_bookings(1).csv')
+
+# Convert the date string to datetime
+hotel_booking_frame['reservation_status_date'] = pd.to_datetime(hotel_booking_frame['reservation_status_date'])
+
+# Separate the data of different hotels
+resort_hotel = hotel_booking_frame[hotel_booking_frame['hotel'] == 'Resort Hotel']
+city_hotel = hotel_booking_frame[hotel_booking_frame['hotel'] == 'City Hotel']
+
+# Group by reservation status date and calculate the mean of adr
+resort_hotel = resort_hotel.groupby('reservation_status_date')[['adr']].mean()
+city_hotel = city_hotel.groupby('reservation_status_date')[['adr']].mean()
+
+# Print the mean adr of resort hotel over time
+st.write("# Question 6: Show the data to form the line chart")
+st.write("Resort Hotel:")
+st.write(resort_hotel)
+
+# Print the mean adr of city hotel over time
+st.write("City Hotel:")
+st.write(city_hotel)
+
+# %%
+import pandas as pd
+import matplotlib.pyplot as plt
+
+plt.style.use("ggplot")
+
+# Obtain the dataset
+hotel_booking_frame = pd.read_csv('hotel_bookings(1).csv')
+
+# Convert the date string to datetime
+hotel_booking_frame['reservation_status_date'] = pd.to_datetime(hotel_booking_frame['reservation_status_date'])
+
+# Separate the data of different hotels
+resort_hotel = hotel_booking_frame[hotel_booking_frame['hotel'] == 'Resort Hotel']
+city_hotel = hotel_booking_frame[hotel_booking_frame['hotel'] == 'City Hotel']
+
+# Assign month column
+resort_hotel = resort_hotel.assign(month=resort_hotel["reservation_status_date"].dt.strftime("%m"))
+city_hotel = city_hotel.assign(month=city_hotel["reservation_status_date"].dt.strftime("%m"))
+
+# Group by month and calculate the sum of adr
+total_adr_resort = resort_hotel.groupby(["month"])["adr"].sum()
+total_adr_city = city_hotel.groupby(["month"])["adr"].sum()
+
+# Print the total adr of resort hotel for each month
+st.write("# Question 7: Avergae price of each month in Resort Hotel and City Hotel")
+st.write("Resort Hotel:")
+st.write(total_adr_resort)
+
+# Print the total adr of city hotel for each month
+st.write("City Hotel:")
+st.write(total_adr_city)
 
 # %%
 

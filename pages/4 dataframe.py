@@ -32,43 +32,55 @@ st.write(
 )
 
 # Read the data file
-data = pd.read_csv('hotel_bookings(1).csv')
 
-# Data preprocessing
-# Drop missing values
-data = data.dropna()
+# Read the data file
 
-# Question 1: Calculate the average length of stay for each hotel
-average_stay = data.groupby('hotel')['stays_in_week_nights'].mean()
-st.write("# Question 1: Average length of stay for each hotel")
-st.write(average_stay)
 
-# Question 2: Calculate the cancellation rate for each month
-# Convert arrival_date to datetime format
-data['arrival_date'] = pd.to_datetime(data['arrival_date_year'].astype(str) + '-' + data['arrival_date_month'] + '-' + data['arrival_date_day_of_month'].astype(str))
-# Extract year and month from arrival_date
-data['year_month'] = data['arrival_date'].dt.to_period('M')
-# Calculate cancellation rate by grouping data by year_month and taking the mean of is_canceled
-cancellation_rate = data.groupby('year_month')['is_canceled'].mean()
-st.write("# Question 2: Cancellation rate for each month")
-st.write(cancellation_rate)
-
-data = pd.read_csv('hotel_bookings(1).csv')
-
-# Data preprocessing
-# Drop missing values
-data = data.dropna()
-
-# Question 1: Calculate the number of bookings for each market segment and distribution channel
-bookings_by_segment_channel = data.groupby(['market_segment', 'distribution_channel'])['hotel'].count()
-st.write("# Question 3: Number of bookings for each market segment and distribution channel")
-st.write(bookings_by_segment_channel)
-
-# Question 2: Calculate the average cancellation rate for each market segment and distribution channel
-cancellation_rate_by_segment_channel = data.groupby(['market_segment', 'distribution_channel'])['is_canceled'].mean()
-st.write("# Question 4: Average cancellation rate for each market segment and distribution channel")
-st.write(cancellation_rate_by_segment_channel)
 # %%
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# Read the data file
+hotel_booking_frame = pd.read_csv('hotel_bookings(1).csv')
+
+# Group by hotel and assigned room type, calculate the mean of adr
+assigned_price_frame = hotel_booking_frame.groupby(["hotel", "assigned_room_type"])["adr"].mean().reset_index()
+
+# Pivot process
+pivot_df = assigned_price_frame.pivot_table(index='hotel', columns='assigned_room_type', values='adr')
+
+# Display the pivot table
+st.write("# Question 5: Average price of assigned rooms in City Hotel and Resort Hotel")
+st.write(pivot_df)  # This will display the pivot table with average adr for each hotel and assigned room type
+
+# %%import pandas
+import matplotlib.pyplot as plt
+import pandas as pd
+plt.style.use("ggplot")
+
+# obtain dataset
+hotel_booking_frame = pandas.read_csv("hotel_bookings(1).csv")
+assigned_price_frame = hotel_booking_frame.groupby(["hotel", "assigned_room_type"])["adr"].mean().reset_index()
+
+# pivot process
+pivot_df = assigned_price_frame.pivot_table(index='hotel', columns='assigned_room_type', values='adr')
+
+# draw the bar
+ax = pivot_df.plot(kind="bar", yerr=hotel_booking_frame.groupby(['hotel', 'assigned_room_type'])['adr'].std().unstack(), figsize=(30, 8))
+ax.set_xlabel('hotel')
+ax.set_ylabel('adr')
+ax.set_title('Average Price and Standard Deviation of Assigned Rooms')
+ax.legend(title='assigned_room_type', title_fontsize='12')
+ax.set_xticklabels(hotel_booking_frame['hotel'].unique(), rotation=0)
+
+# The number of prices is displayed at the top of the bar chart
+for p in ax.patches:
+    ax.annotate(f'{p.get_height():.2f}', (p.get_x() + p.get_width() / 2., p.get_height()), ha='center', va='bottom', fontsize=8)
+
+# show table
+plt.show()
+
+
 
 # %%
 
