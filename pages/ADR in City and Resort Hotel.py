@@ -22,11 +22,6 @@ from streamlit.hello.utils import show_code
 
 import numpy as np
 
-
-
-
-import streamlit as st
-import pandas as pd
 import matplotlib.pyplot as plt
 
 # Load dataset

@@ -25,10 +25,8 @@ import pandas as pd
 st.set_page_config(page_title="DataFrame Demo", page_icon="📊")
 st.write("# This demo shows proportion of Rosort/City Hotel orders per month")
 
-
-import pandas as pd
 import matplotlib.pyplot as plt
-import streamlit as st
+
 import tempfile
 
 plt.style.use("ggplot")

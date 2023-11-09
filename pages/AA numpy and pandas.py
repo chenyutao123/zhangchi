@@ -21,7 +21,7 @@ from streamlit.hello.utils import show_code
 
 import numpy as np
 import pandas as pd
-
+import matplotlib.pyplot as plt
 st.set_page_config(page_title="DataFrame Demo", page_icon="📊")
 
 
@@ -64,8 +64,7 @@ cancellation_rate_by_segment_channel = data.groupby(['market_segment', 'distribu
 st.write("# Question 4: Average cancellation rate for each market segment and distribution channel")
 st.write(cancellation_rate_by_segment_channel)
 
-import pandas as pd
-import matplotlib.pyplot as plt
+
 
 # Read the data file
 hotel_booking_frame = pd.read_csv('hotel_bookings(1).csv')
@@ -81,8 +80,7 @@ st.write("# Question 5: Average price of assigned rooms in City Hotel and Resort
 st.write(pivot_df)  # This will display the pivot table with average adr for each hotel and assigned room type
 
 # %%
-import pandas as pd
-import matplotlib.pyplot as plt
+
 
 # Set the plot style
 plt.style.use("ggplot")
@@ -111,8 +109,7 @@ st.write("City Hotel:")
 st.write(city_hotel)
 
 # %%
-import pandas as pd
-import matplotlib.pyplot as plt
+
 
 plt.style.use("ggplot")
 
