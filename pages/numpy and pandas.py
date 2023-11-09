@@ -15,7 +15,6 @@
 from urllib.error import URLError
 
 import altair as alt
-import pandas as pd
 
 import streamlit as st
 from streamlit.hello.utils import show_code
@@ -53,11 +52,6 @@ cancellation_rate = data.groupby('year_month')['is_canceled'].mean()
 st.write("# Question 2: Cancellation rate for each month")
 st.write(cancellation_rate)
 
-# %%
-import numpy as np
-import pandas as pd
-
-# Read the data file
 data = pd.read_csv('hotel_bookings(1).csv')
 
 # Data preprocessing
@@ -74,7 +68,6 @@ cancellation_rate_by_segment_channel = data.groupby(['market_segment', 'distribu
 st.write("# Question 4: Average cancellation rate for each market segment and distribution channel")
 st.write(cancellation_rate_by_segment_channel)
 
-# %%
 import pandas as pd
 import matplotlib.pyplot as plt
 
@@ -153,6 +146,8 @@ st.write(total_adr_resort)
 # Print the total adr of city hotel for each month
 st.write("City Hotel:")
 st.write(total_adr_city)
+
+# %%
 
 # %%
 

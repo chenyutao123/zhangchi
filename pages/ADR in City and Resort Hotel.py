@@ -15,12 +15,13 @@
 from urllib.error import URLError
 
 import altair as alt
+import pandas as pd
 
 import streamlit as st
 from streamlit.hello.utils import show_code
 
 import numpy as np
-import pandas as pd
+
 
 st.set_page_config(page_title="DataFrame Demo", page_icon="📊")
 st.markdown("# DataFrame Demo")
@@ -30,46 +31,53 @@ st.write(
 (Data courtesy of the [UN Data Explorer](http://data.un.org/Explorer.aspx).)"""
 )
 
-# Read the data file
-data = pd.read_csv('hotel_bookings(1).csv')
 
-# Data preprocessing
-# Drop missing values
-data = data.dropna()
+import streamlit as st
+import pandas as pd
+import matplotlib.pyplot as plt
 
-# Question 1: Calculate the average length of stay for each hotel
-average_stay = data.groupby('hotel')['stays_in_week_nights'].mean()
-st.write("# Question 1: Average length of stay for each hotel")
-st.write(average_stay)
+# Load dataset
+hotel_booking_frame = pd.read_csv("hotel_bookings(1).csv")
 
-# Question 2: Calculate the cancellation rate for each month
-# Convert arrival_date to datetime format
-data['arrival_date'] = pd.to_datetime(data['arrival_date_year'].astype(str) + '-' + data['arrival_date_month'] + '-' + data['arrival_date_day_of_month'].astype(str))
-# Extract year and month from arrival_date
-data['year_month'] = data['arrival_date'].dt.to_period('M')
-# Calculate cancellation rate by grouping data by year_month and taking the mean of is_canceled
-cancellation_rate = data.groupby('year_month')['is_canceled'].mean()
-st.write("# Question 2: Cancellation rate for each month")
-st.write(cancellation_rate)
+# Convert date string to datetime
+hotel_booking_frame['reservation_status_date'] = pd.to_datetime(hotel_booking_frame['reservation_status_date'])
 
-data = pd.read_csv('hotel_bookings(1).csv')
+# Separate data of different hotels
+resort_hotel = hotel_booking_frame[hotel_booking_frame['hotel'] == 'Resort Hotel']
+city_hotel = hotel_booking_frame[hotel_booking_frame['hotel'] == 'City Hotel']
+resort_hotel = resort_hotel.groupby('reservation_status_date')[['adr']].mean()
+city_hotel = city_hotel.groupby('reservation_status_date')[['adr']].mean()
 
-# Data preprocessing
-# Drop missing values
-data = data.dropna()
+# Create interactive view
+st.title('ADR in City and Resort Hotel')
 
-# Question 1: Calculate the number of bookings for each market segment and distribution channel
-bookings_by_segment_channel = data.groupby(['market_segment', 'distribution_channel'])['hotel'].count()
-st.write("# Question 3: Number of bookings for each market segment and distribution channel")
-st.write(bookings_by_segment_channel)
+slider_value = st.slider("Select maximum ADR value:", 0, 300, 50, 1)
 
-# Question 2: Calculate the average cancellation rate for each market segment and distribution channel
-cancellation_rate_by_segment_channel = data.groupby(['market_segment', 'distribution_channel'])['is_canceled'].mean()
-st.write("# Question 4: Average cancellation rate for each market segment and distribution channel")
-st.write(cancellation_rate_by_segment_channel)
-# %%
+plt.figure(figsize=(16, 6))
+fig, ax = plt.subplots()
+fig.subplots_adjust(bottom=0.2)
 
-# %%
+
+ax.plot(resort_hotel.index, resort_hotel['adr'], label='Resort Hotel')
+ax.plot(city_hotel.index, city_hotel['adr'], label='City Hotel')
+ax.set_xlabel('Date')
+ax.set_ylabel('ADR')
+ax.set_ylim(0, slider_value)
+ax.legend()
+
+
+
+
+
+# Create the dropdown menu
+#hotel_dropdown = widgets.Dropdown(options=['Resort Hotel', 'City Hotel'], value='Resort Hotel', description='Hotel:')
+
+# Call the update_plot() function when the dropdown menu is changed
+#widgets.interact(update_plot, hotel=hotel_dropdown)
+
+#update_plot('Resort Hotel')
+
+# %
 
 
 
@@ -115,6 +123,7 @@ def data_frame_demo():
         """
             % e.reason
         )
+st.pyplot()
 
 
 

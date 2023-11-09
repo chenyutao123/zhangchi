@@ -23,12 +23,7 @@ import numpy as np
 import pandas as pd
 
 st.set_page_config(page_title="DataFrame Demo", page_icon="📊")
-st.markdown("# DataFrame Demo")
-st.sidebar.header("DataFrame Demo")
-st.write(
-    """This demo shows how to use `st.write` to visualize Pandas DataFrames.
-(Data courtesy of the [UN Data Explorer](http://data.un.org/Explorer.aspx).)"""
-)
+st.write("# This demo shows proportion of Rosort/City Hotel orders per month")
 
 
 import pandas as pd
