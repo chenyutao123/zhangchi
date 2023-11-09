@@ -15,7 +15,6 @@
 from urllib.error import URLError
 
 import altair as alt
-import pandas as pd
 
 import streamlit as st
 from streamlit.hello.utils import show_code
@@ -31,35 +30,59 @@ st.write(
 (Data courtesy of the [UN Data Explorer](http://data.un.org/Explorer.aspx).)"""
 )
 
-import pandas
+
+import pandas as pd
 import matplotlib.pyplot as plt
-import ipywidgets as widgets
-from IPython.display import display
+import streamlit as st
+import tempfile
 
 plt.style.use("ggplot")
 
 # obtain dataset
-hotel_booking_frame = pandas.read_csv("hotel_bookings(1).csv")
+hotel_booking_frame = pd.read_csv("hotel_bookings(1).csv")
 
 # convert date string to datetime
-hotel_booking_frame['reservation_status_date'] = pandas.to_datetime(hotel_booking_frame['reservation_status_date'])
+hotel_booking_frame['reservation_status_date'] = pd.to_datetime(hotel_booking_frame['reservation_status_date'])
 
 # separate data of different hotels
 resort_hotel = hotel_booking_frame[hotel_booking_frame['hotel'] == 'Resort Hotel']
 city_hotel = hotel_booking_frame[hotel_booking_frame['hotel'] == 'City Hotel']
-resort_hotel = resort_hotel.groupby('reservation_status_date')[['adr']].mean()
-city_hotel = city_hotel.groupby('reservation_status_date')[['adr']].mean()
 
-plt.figure(figsize=(16,6))
-plt.title('ADR in City and Resort Hotel', fontsize=20)
-plt.plot(resort_hotel.index, resort_hotel['adr'], label='Resort Hotel')
-plt.plot(city_hotel.index, city_hotel['adr'], label='City Hotel')
-plt.xlabel("Date")
-plt.ylabel("ADR")
-plt.legend(fontsize=20)
+resort_hotel = resort_hotel.assign(month=resort_hotel["reservation_status_date"].dt.strftime("%m"))
+city_hotel = city_hotel.assign(month=city_hotel["reservation_status_date"].dt.strftime("%m"))
 
+total_adr_resort = resort_hotel.groupby(["month"])["adr"].sum()
+total_adr_city = city_hotel.groupby(["month"])["adr"].sum()
 
-st.plt.show()
+labels = ['Resort Hotel', 'City Hotel']
+
+# Add a sidebar for user input
+st.sidebar.header('Select Hotel Type')
+hotel_type = st.sidebar.selectbox('Choose a hotel type:', ['Resort Hotel', 'City Hotel'])
+
+# Create a figure with a single subplot
+fig, ax = plt.subplots(figsize=(8, 6))
+
+if hotel_type == 'Resort Hotel':
+    # Plot the ADR for Resort Hotel
+    ax.pie(total_adr_resort, labels=total_adr_resort.index, autopct='%1.1f%%', startangle=140)
+    ax.set_title('Resort Hotel ADR by Month')
+    ax.axis('equal')
+else:
+    # Plot the ADR for City Hotel
+    ax.pie(total_adr_city, labels=total_adr_city.index, autopct='%1.1f%%', startangle=140)
+    ax.set_title('City Hotel ADR by Month')
+    ax.axis('equal')
+
+# Save the figure as a temporary file
+temp_file_name = tempfile.mkstemp(suffix='.png')[1]
+fig.savefig(temp_file_name)
+plt.close(fig)
+
+# Display the image using Streamlit
+st.image(temp_file_name)
+
+st.pyplot()
 
 # %%
 

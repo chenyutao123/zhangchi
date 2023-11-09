@@ -12,45 +12,21 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from urllib.error import URLError
 
-import altair as alt
 import pandas as pd
-
-import streamlit as st
-from streamlit.hello.utils import show_code
-
-import numpy as np
-import pandas as pd
-
-st.set_page_config(page_title="DataFrame Demo", page_icon="📊")
-st.markdown("# DataFrame Demo")
-st.sidebar.header("DataFrame Demo")
-st.write(
-    """This demo shows how to use `st.write` to visualize Pandas DataFrames.
-(Data courtesy of the [UN Data Explorer](http://data.un.org/Explorer.aspx).)"""
-)
-
-
-# %%import pandas as pd
-import seaborn as sns
 import matplotlib.pyplot as plt
-
-plt.style.use("ggplot")
-
+import seaborn as sns
+import streamlit as st
 
 # obtain dataset
-hotel_booking_frame = pandas.read_csv("hotel_bookings(1).csv")
+data = pd.read_csv('hotel_bookings(1).csv')
 
-# data processing
-data['hotel'] = pd.to_numeric(data['hotel'], errors='coerce')
+# Data initialization
 data['arrival_date_month'] = pd.to_numeric(data['arrival_date_month'], errors='coerce')
 data['meal'] = pd.to_numeric(data['meal'], errors='coerce')
 data['country'] = pd.to_numeric(data['country'], errors='coerce')
 data['market_segment'] = pd.to_numeric(data['market_segment'], errors='coerce')
 data['distribution_channel'] = pd.to_numeric(data['distribution_channel'], errors='coerce')
-data['reserved_room_type'] = pd.to_numeric(data['reserved_room_type'], errors='coerce')
-data['assigned_room_type'] = pd.to_numeric(data['assigned_room_type'], errors='coerce')
 data['deposit_type'] = pd.to_numeric(data['deposit_type'], errors='coerce')
 data['customer_type'] = pd.to_numeric(data['customer_type'], errors='coerce')
 data['reservation_status'] = pd.to_numeric(data['reservation_status'], errors='coerce')
@@ -58,7 +34,6 @@ data['reservation_status_date'] = pd.to_numeric(data['reservation_status_date'],
 
 # Find the column that needs to be analyzed
 columns_to_analyze = [
-'hotel',
  'is_canceled',
  'lead_time',
  'arrival_date_year',
@@ -72,32 +47,27 @@ columns_to_analyze = [
  'is_repeated_guest',
  'previous_cancellations',
  'previous_bookings_not_canceled',
- 'reserved_room_type',
- 'assigned_room_type',
  'booking_changes',
- 'deposit_type',
  'agent',
  'company',
  'days_in_waiting_list',
- 'customer_type',
  'adr',
  'required_car_parking_spaces',
  'total_of_special_requests',
- 'reservation_status',
- 'reservation_status_date'
 ]
-dfab_an = data[columns_to_analyze]
+data = data[columns_to_analyze]
 
 # Find the most relevant eight variables
-correlation_matrix = dfab_an.corr().abs().nlargest(9,'assigned_room_type')['assigned_room_type'].index
-cm = dfab_an[correlation_matrix].corr()
+correlation_matrix = data.corr().abs().nlargest(8,'adr')['adr'].index
+cm = data[correlation_matrix].corr()
 
 # Draw a heat map
 plt.figure(figsize=(12, 9))
 sns.heatmap(cm, annot=True, cmap='Blues')
-plt.title('Top 8 Correlation with assigned room type')
-plt.show()
+plt.title('Top 8 Correlation with adr');
 
+st.set_option('deprecation.showPyplotGlobalUse', False)
+st.pyplot()
 
 
 
@@ -149,4 +119,4 @@ def data_frame_demo():
 
 #data_frame_demo()
 
-show_code(data_frame_demo)
+#show_code(data_frame_demo)
