@@ -30,20 +30,38 @@ def run():
 
     st.markdown(  
         """
-        Streamlit is an open-source app framework built specifically for
-        Machine Learning and Data Science projects.
-        **👈 Select a demo from the sidebar** to see some examples
-        of what Streamlit can do!
+
+        This project is made by Team 6, whose name is The six. Our group contains coincidently 6 people ———— 
+        Xingchen Xu, Zhixuan Ye, Chi Zhang, Ruopu Wang, Wanyin Yang, Yutao Chen! 
+        
         ### Readme to describe the dataset 
-        - Check out [streamlit.io](https://streamlit.io)
-        - Jump into our [documentation](https://docs.streamlit.io)
-        - Ask a question in our [community
-          forums](https://discuss.streamlit.io)
-        ### Simple analyze about the dataset :books:
-        - Use a neural net to [analyze the Udacity Self-driving Car Image
-          Dataset](https://github.com/streamlit/demo-self-driving)
-        - Explore a [New York City rideshare dataset](https://github.com/streamlit/demo-uber-nyc-pickups)
+        - Analyze the hotel_booking dataset 
+        In this page, we examine several aspects of hotel booking and analyze the data to gain a deeper understanding
+
+        - Some factors about hotel booking
+
+        (1)Factor 1:
+        Average length of stay for each hotel
+
+
+        (2) Factor 2:
+        Cancellation rate for each month
+
+        (3) Factor 3:
+        Number of booking for each market segment and distribution  channel
+
+        (4)Factor 4:
+        Average cancellation rate for each market segment and distribution channel
+
+        - source
+        We use the source about Average Daily Rate ,Occupancy Rate, Cancellation Rate and so on to gain a deeper understanding of the reasons for changes in hotel bookings.
+
+        ### Simple analyze using numpy and pandas about the dataset :books:
         ### Use chart or plot to visualize the dataset and do the interaction
+        -  ADR in City and Resort Hotel
+        - Average Price of each room type
+        - proportion of orders per month
+        - Top 8 Correlation with adr
     """
     )
 
